@@ -8,10 +8,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by truongnln on 03/21/2018.
@@ -25,11 +30,13 @@ public class MainWebClient extends WebViewClient {
     private static final String LIST_FEED_API_URL = "/api/pending-feedback";
     private static final String MAIN_CSS_URL = "/main_css.css";
     private static final String MAIN_JS_URL = "/main_js.js";
+    private final FeedbackApi feedbackApi;
     private Gson gson;
     private final Context mContext;
 
-    public MainWebClient(Context c) {
+    public MainWebClient(Context c, FeedbackApi api) {
         this.mContext = c;
+        this.feedbackApi = api;
         this.gson = new Gson();
     }
 
@@ -63,7 +70,16 @@ public class MainWebClient extends WebViewClient {
     }
 
     private WebResourceResponse getListFeedApiResponse() {
-        return getJsonResponse("[{\"id\":1,\"feedbackName\":\"Feedback 1\",\"startDate\":\"2018/01/02\"},{\"id\":2,\"feedbackName\":\"Feedback 2\",\"startDate\":\"2018/01/02\"}]");
+        Call<JsonArray> callback = this.feedbackApi.getFeedbacks();
+        String rs;
+        try {
+            Response<JsonArray> response = callback.execute();
+            rs = gson.toJson(response.body());
+        } catch (IOException e) {
+            rs = "[]";
+            e.printStackTrace();
+        }
+        return getJsonResponse(rs);
     }
 
     private WebResourceResponse getListFeedHtmlResponse() {

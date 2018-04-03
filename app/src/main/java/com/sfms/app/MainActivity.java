@@ -10,13 +10,15 @@ public class MainActivity extends FragmentActivity {
 
     private WebView wvDisplay;
     private MainWebClient client;
+    private FeedbackApi feedbackApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.wvDisplay = (WebView) findViewById(R.id.wvDisplay);
-        this.client = new MainWebClient(getApplicationContext());
+        this.feedbackApi = ApiFactory.createApi(FeedbackApi.class);
+        this.client = new MainWebClient(getApplicationContext(), feedbackApi);
 
         this.wvDisplay.setWebViewClient(client);
         WebSettings webSettings = this.wvDisplay.getSettings();
