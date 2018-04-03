@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <link rel="stylesheet" href="main_css.css" />
+    <link rel="stylesheet" href="list_feedback_css.css" />
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="c-teal center">You need to finish these feedbacks:</h3>
+            <div id="feedback-container">
+            </div>
+    </div>
+    <section class="bottom-section center">
+        <a href="#" class="btn bgm-deeporange c-white btn-lg">Log out</a>
+    </section>
+    <template id="feedback-template"><div class="feedback">
+            <span class="index">1</span>
+            <strong class="title">Feedback 1234567890</strong>
+            <span class="date">2018/01/01</span>
+            <a href="#" class="btn bgm-teal c-white">Do feedback</a>
+        </div></template>
+    <template id="nofeedback-template"><h3 class="center c-orange">There is no feedback need to be done!</h3></template>
+    <script src="main_js.js"></script>
+    <script>
+        window.addEventListener('load',function(){
+            pendingLoad();
+        })
+    </script>
+</body>
+
+</html>
