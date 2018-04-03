@@ -20,6 +20,7 @@ public class MainActivity extends FragmentActivity {
 
         this.wvDisplay.setWebViewClient(client);
         WebSettings webSettings = this.wvDisplay.getSettings();
+        LFScript lf = new LFScript(this.wvDisplay, this);
         webSettings.setJavaScriptEnabled(true);
         this.wvDisplay.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
