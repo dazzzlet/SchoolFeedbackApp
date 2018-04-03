@@ -8,6 +8,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 /**
@@ -19,6 +20,6 @@ public interface FeedbackApi {
     Call<JsonArray> getFeedbacks();
     @GET("/conduct-feedback/{id}")
     Call<JsonObject> getFeedback(@Path("id") int id);
-    @GET("/conduct-feedback/save")
+    @POST("/conduct-feedback/save")
     Call<JsonObject> saveFeedback(@Body JsonObject feedback);
 }
