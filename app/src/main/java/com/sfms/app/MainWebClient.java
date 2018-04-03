@@ -18,6 +18,8 @@ import java.io.UnsupportedEncodingException;
  */
 
 public class MainWebClient extends WebViewClient {
+    private static final String FEED_DETAIL_VIEW_URL = "/feedback.html";
+    private static final String FEED_DETAIL_CSS_URL = "/feedback_css.css";
     private static final String LIST_FEED_VIEW_URL = "/list_feedback.html";
     private static final String LIST_FEED_CSS_URL = "/list_feedback_css.css";
     private static final String LIST_FEED_API_URL = "/api/pending-feedback";
@@ -40,6 +42,12 @@ public class MainWebClient extends WebViewClient {
                 break;
             case LIST_FEED_CSS_URL:
                 response = getListFeedCssResponse();
+                break;
+            case FEED_DETAIL_VIEW_URL:
+                response = getFeedDetailHtmlResponse();
+                break;
+            case FEED_DETAIL_CSS_URL:
+                response = getFeedDetailCssResponse();
                 break;
             case MAIN_CSS_URL:
                 response = getMainCssResponse();
@@ -65,6 +73,16 @@ public class MainWebClient extends WebViewClient {
 
     private WebResourceResponse getListFeedCssResponse() {
         InputStream input = mContext.getResources().openRawResource(R.raw.list_feedback_css);
+        return new WebResourceResponse("text/css", "UTF-8", input);
+    }
+
+    private WebResourceResponse getFeedDetailHtmlResponse() {
+        InputStream input = mContext.getResources().openRawResource(R.raw.feedback);
+        return new WebResourceResponse("text/html", "UTF-8", input);
+    }
+
+    private WebResourceResponse getFeedDetailCssResponse() {
+        InputStream input = mContext.getResources().openRawResource(R.raw.feedback_css);
         return new WebResourceResponse("text/css", "UTF-8", input);
     }
 
