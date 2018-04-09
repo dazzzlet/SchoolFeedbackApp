@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -19,7 +20,7 @@ public interface FeedbackApi {
     @GET("/conduct-feedback/list")
     Call<JsonArray> getFeedbacks();
     @GET("/conduct-feedback/{id}")
-    Call<JsonObject> getFeedback(@Path("id") int id);
+    Call<JsonObject> getFeedback(@Path("id") String id);
     @POST("/conduct-feedback/save")
-    Call<JsonObject> saveFeedback(@Body JsonObject feedback);
+    Call<JsonObject> saveFeedback(@Body RequestBody feedback);
 }

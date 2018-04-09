@@ -1,6 +1,7 @@
 package com.sfms.app;
 
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
@@ -9,6 +10,7 @@ import android.webkit.WebViewClient;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,16 +30,27 @@ public class MainWebClient extends WebViewClient {
     private static final String LIST_FEED_VIEW_URL = "/list_feedback.html";
     private static final String LIST_FEED_CSS_URL = "/list_feedback_css.css";
     private static final String LIST_FEED_API_URL = "/api/pending-feedback";
+    private static final String DETAIL_FEED_API_URL = "/api/detail-feedback";
     private static final String MAIN_CSS_URL = "/main_css.css";
     private static final String MAIN_JS_URL = "/main_js.js";
+    public static final String LIST_URL = "http://sfms.com/list_feedback.html";
+    public static final String DETAIL_URL = "http://sfms.com/feedback.html";
     private final FeedbackApi feedbackApi;
+    private final WebView wvDisplay;
+    private final LFScript lf;
+    private final FDScript fd;
     private Gson gson;
     private final Context mContext;
+    private String detailId = "";
 
-    public MainWebClient(Context c, FeedbackApi api) {
+    public MainWebClient(FragmentActivity c, WebView wvDisplay, FeedbackApi api) {
         this.mContext = c;
         this.feedbackApi = api;
         this.gson = new Gson();
+        this.wvDisplay = wvDisplay;
+        wvDisplay.setWebViewClient(this);
+        this.lf = new LFScript(wvDisplay, c);
+        this.fd = new FDScript(wvDisplay, c, api);
     }
 
     @Override
@@ -51,6 +64,7 @@ public class MainWebClient extends WebViewClient {
                 response = getListFeedCssResponse();
                 break;
             case FEED_DETAIL_VIEW_URL:
+                this.detailId = request.getUrl().getQueryParameter("id");
                 response = getFeedDetailHtmlResponse();
                 break;
             case FEED_DETAIL_CSS_URL:
@@ -65,8 +79,24 @@ public class MainWebClient extends WebViewClient {
             case LIST_FEED_API_URL:
                 response = getListFeedApiResponse();
                 break;
+            case DETAIL_FEED_API_URL:
+                response = getDetailFeedApiResponse();
+                break;
         }
         return response;
+    }
+
+    private WebResourceResponse getDetailFeedApiResponse() {
+        Call<JsonObject> callback = this.feedbackApi.getFeedback(this.detailId);
+        String rs;
+        try {
+            Response<JsonObject> response = callback.execute();
+            rs = gson.toJson(response.body());
+        } catch (IOException e) {
+            rs = "[]";
+            e.printStackTrace();
+        }
+        return getJsonResponse(rs);
     }
 
     private WebResourceResponse getListFeedApiResponse() {

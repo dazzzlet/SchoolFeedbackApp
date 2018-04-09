@@ -16,3 +16,22 @@
 .bottom-section .progress-bar {
     padding-top: 5px;
 }
+
+#feedback-container .card-body ul {
+    list-style-type: none;
+    padding-left: 10px;
+}
+
+#feedback-container .card-body input[type="text"],
+#feedback-container .card-body textarea {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid gray;
+    padding: 10px 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+#feedback-container .radio input[type="text"]{
+    width: 80%;
+}
