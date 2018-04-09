@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+
 /**
  * Created by truongnln on 04/03/2018.
  */
@@ -20,11 +21,11 @@ public class LFScript {
     }
 
     @JavascriptInterface
-    public void doFeedback(int id) {
+    public void doFeedback(final String id) {
         this.context.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                webview.loadUrl("http://sfms.com/feedback.html");
+                webview.loadUrl(MainWebClient.DETAIL_URL + "?id=" + id);
             }
         });
     }
