@@ -58,6 +58,7 @@ public class FDScript {
                     public void run() {
                         Toast toast = Toast.makeText(context,"Fail to submit your feedback! please try again!", Toast.LENGTH_LONG);
                         toast.show();
+                        //webview.loadUrl(MainWebClient.LIST_URL);
                     }
                 });
             }

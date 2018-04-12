@@ -6,7 +6,7 @@ function renderLayout(data) {
     document.getElementById('feedback-container').innerHTML = '';
     if (data && data.length) {
         for (var i = 0; i < data.length; i++) {
-            var feedback = data[i];
+            var feedback = data[i].feedbackByFeedbackId;
             var domItem = renderFeedbackItem(feedback, i);
             document.getElementById('feedback-container').appendChild(domItem);
         }
@@ -37,7 +37,7 @@ function updateProcess(qId, option) {
                 if (!conductTracking[qId]) {
                     conductTracking[qId] = {};
                 }
-                conductTracking[qId][option.id] = e.target.checked;
+                //conductTracking[qId][option.id] = e.target.checked;
                 break;
             case 'radio':
                 conductTracking[qId] = option.id;
@@ -151,8 +151,8 @@ function renderFeedback(data) {
                     renderFn = renderTextTemplate;
                     break;
             }
+            if (id) {
             template = document.getElementById(id).innerHTML;
-            if (template) {
                 var cTemp = document.createElement('div');
                 cTemp.innerHTML = template;
                 template = cTemp.querySelector('.card');
@@ -213,6 +213,7 @@ function ajax(option) {
 }
 
 if (document.getElementById('btn-send-result')) {
+
     document.getElementById('btn-send-result')
         .addEventListener('click', function () {
             conductResult = [];
@@ -220,23 +221,42 @@ if (document.getElementById('btn-send-result')) {
                 if (typeof conductTracking[i] === 'object') {
                     for (var j in conductTracking[i]) {
                         if (conductTracking[i][j]) {
+                        conductResult.push({
+                                                        optionnByOptionnId: j,
+                                                        answerContent: conductTracking[i][j]
+                                                    });
+                        }
+                       /* if (conductTracking[i][j] != null) {
                             conductResult.push({
                                 optionnByOptionnId: j,
                                 answerContent: conductTracking[i][j]
                             });
-                        }
+                            console.log(j);
+                            console.log(conductTracking[i][j]);
+                            } else {
+                                conductResult.push({
+                                    optionnByOptionnId: j
+                                });
+                                 console.log(j);
+                            }
+                        }*/
                     }
                 } else {
                     conductResult.push({
-                        optionnByOptionnId: conductTracking[i],
-                        answerContent: ''
+                        optionnByOptionnId: conductTracking[i]
+                       // answerContent: ''
                     });
+                    console.log(conductTracking[i]);
                 }
             }
+            var content = {
+                "feedbackId": window.feedback.id,
+                "answers": conductResult
+                };
             if (typeof FD !== 'undefined') {
-                FD.save(JSON.stringify(conductResult));
+                FD.save(JSON.stringify(content));
             }
-            console.log(conductResult);
+            console.log(content);
 
         });
 }
