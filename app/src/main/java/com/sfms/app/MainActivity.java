@@ -24,6 +24,11 @@ public class MainActivity extends FragmentActivity {
         webSettings.setJavaScriptEnabled(true);
         this.wvDisplay.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
-        this.wvDisplay.loadUrl(MainWebClient.LIST_URL);
+        this.wvDisplay.loadUrl(MainWebClient.LOGIN_URL);
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.client.back();
     }
 }
