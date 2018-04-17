@@ -6,10 +6,7 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -21,33 +18,38 @@ import retrofit2.Response;
  * Created by truongnln on 04/03/2018.
  */
 
-public class FDScript {
-    public static String JS_NAME = "FD";
+public class LGScript implements ILogin {
+    private static String JS_NAME = "LG";
     private final WebView webview;
     private final FragmentActivity context;
     private final FeedbackApi api;
     private final Gson gson;
-    private final ILogin loginInfo;
+    private String username;
 
-    public FDScript(WebView webView, FragmentActivity activity, FeedbackApi api, ILogin loginInfo) {
+    public String getUsername() {
+        return username;
+    }
+
+    public LGScript(WebView webView, FragmentActivity activity, FeedbackApi api) {
         this.webview = webView;
         this.context = activity;
-        this.loginInfo = loginInfo;
         this.webview.addJavascriptInterface(this, JS_NAME);
         this.api = api;
         this.gson = new Gson();
     }
 
     @JavascriptInterface
-    public void save(String feedbackJson) {
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), feedbackJson);
-        Call<JsonObject> callback = this.api.saveFeedback(loginInfo.getUsername(), body);
+    public void login(final String loginJson) {
+        final JsonObject loginObject = this.gson.fromJson(loginJson, JsonObject.class);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), loginJson);
+        Call<JsonObject> callback = this.api.login(body);
         callback.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        username = loginObject.get("username").getAsString();
                         webview.loadUrl(MainWebClient.LIST_URL);
                     }
                 });
@@ -58,9 +60,9 @@ public class FDScript {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast toast = Toast.makeText(context, "Fail to submit your feedback! please try again!", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(context, "Login fail! please try again!", Toast.LENGTH_LONG);
                         toast.show();
-                        //webview.loadUrl(MainWebClient.LIST_URL);
+                        webview.loadUrl("javascript:showLoginMessage('Username or password is invalid!')");
                     }
                 });
             }

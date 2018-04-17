@@ -152,7 +152,7 @@ function renderFeedback(data) {
                     break;
             }
             if (id) {
-            template = document.getElementById(id).innerHTML;
+                template = document.getElementById(id).innerHTML;
                 var cTemp = document.createElement('div');
                 cTemp.innerHTML = template;
                 template = cTemp.querySelector('.card');
@@ -161,6 +161,10 @@ function renderFeedback(data) {
             }
         }
     }
+}
+
+function showLoginMessage(msg){
+    document.getElementById('error').innerHTML = msg;
 }
 
 function pendingLoad() {
@@ -212,6 +216,20 @@ function ajax(option) {
     }
 }
 
+if (document.getElementById('btn-login')) {
+    document.getElementById('btn-login')
+        .addEventListener('click', function () {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            var login  = {
+                username:username,
+                password:password
+            };
+            if (typeof LG !== 'undefined') {
+                LG.login(JSON.stringify(login));
+            }
+        });
+}
 if (document.getElementById('btn-send-result')) {
 
     document.getElementById('btn-send-result')
@@ -221,30 +239,30 @@ if (document.getElementById('btn-send-result')) {
                 if (typeof conductTracking[i] === 'object') {
                     for (var j in conductTracking[i]) {
                         if (conductTracking[i][j]) {
-                        conductResult.push({
-                                                        optionnByOptionnId: j,
-                                                        answerContent: conductTracking[i][j]
-                                                    });
-                        }
-                       /* if (conductTracking[i][j] != null) {
                             conductResult.push({
                                 optionnByOptionnId: j,
                                 answerContent: conductTracking[i][j]
                             });
-                            console.log(j);
-                            console.log(conductTracking[i][j]);
-                            } else {
-                                conductResult.push({
-                                    optionnByOptionnId: j
-                                });
-                                 console.log(j);
-                            }
-                        }*/
+                        }
+                        /* if (conductTracking[i][j] != null) {
+                             conductResult.push({
+                                 optionnByOptionnId: j,
+                                 answerContent: conductTracking[i][j]
+                             });
+                             console.log(j);
+                             console.log(conductTracking[i][j]);
+                             } else {
+                                 conductResult.push({
+                                     optionnByOptionnId: j
+                                 });
+                                  console.log(j);
+                             }
+                         }*/
                     }
                 } else {
                     conductResult.push({
                         optionnByOptionnId: conductTracking[i]
-                       // answerContent: ''
+                        // answerContent: ''
                     });
                     console.log(conductTracking[i]);
                 }
@@ -252,7 +270,7 @@ if (document.getElementById('btn-send-result')) {
             var content = {
                 "feedbackId": window.feedback.id,
                 "answers": conductResult
-                };
+            };
             if (typeof FD !== 'undefined') {
                 FD.save(JSON.stringify(content));
             }
