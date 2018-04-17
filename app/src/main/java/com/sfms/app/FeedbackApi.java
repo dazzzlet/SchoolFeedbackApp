@@ -17,10 +17,10 @@ import retrofit2.http.Path;
  */
 
 public interface FeedbackApi {
-    @GET("feedbacks/conduct")
+    @GET("feedbacks/conduct-mobile")
     Call<JsonArray> getFeedbacks();
-    @GET("feedbacks/conduct/{id}")
+    @GET("feedbacks/conduct-mobile/{id}")
     Call<JsonObject> getFeedback(@Path("id") String id);
-    @POST("conduct-feedback/save")
+    @POST("conduct-feedback/save-mobile")
     Call<JsonObject> saveFeedback(@Body RequestBody feedback);
 }

@@ -17,7 +17,7 @@
     content: ".";
 }
 .feedback .title{
-    width: 35%;
+    width: 60%;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;

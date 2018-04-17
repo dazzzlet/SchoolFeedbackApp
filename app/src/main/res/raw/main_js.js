@@ -21,7 +21,7 @@ function renderFeedbackItem(feedback, i) {
     container.innerHTML = document.getElementById('feedback-template').innerHTML;
     container.querySelector('.index').innerHTML = i;
     container.querySelector('.title').innerHTML = feedback.feedbackName;
-    container.querySelector('.date').innerHTML = feedback.startDate;
+   // container.querySelector('.date').innerHTML = feedback.startDate;
     container.querySelector('.btn').addEventListener('click', function (e) {
         if (typeof LF !== 'undefined') {
             LF.doFeedback(feedback.id);
