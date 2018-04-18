@@ -41,22 +41,28 @@ public class LGScript implements ILogin {
     @JavascriptInterface
     public void login(final String loginJson) {
         final JsonObject loginObject = this.gson.fromJson(loginJson, JsonObject.class);
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), loginJson);
-        Call<JsonObject> callback = this.api.login(body);
-        callback.enqueue(new Callback<JsonObject>() {
+        Call<Boolean> callback = this.api.login(loginObject.get("username").getAsString(),
+                loginObject.get("password").getAsString());
+        callback.enqueue(new Callback<Boolean>() {
             @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+            public void onResponse(Call<Boolean> call, final Response<Boolean> response) {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        username = loginObject.get("username").getAsString();
-                        webview.loadUrl(MainWebClient.LIST_URL);
+                        if (response.body()) {
+                            username = loginObject.get("username").getAsString();
+                            webview.loadUrl(MainWebClient.LIST_URL);
+                        } else {
+                            Toast toast = Toast.makeText(context, "Login fail! please try again!", Toast.LENGTH_LONG);
+                            toast.show();
+                            webview.loadUrl("javascript:showLoginMessage('Username or password is invalid!')");
+                        }
                     }
                 });
             }
 
             @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+            public void onFailure(Call<Boolean> call, Throwable t) {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

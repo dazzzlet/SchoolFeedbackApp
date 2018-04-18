@@ -28,5 +28,5 @@ public interface FeedbackApi {
     Call<JsonObject> saveFeedback(@Header("username") String username, @Body RequestBody feedback);
 
     @POST("mobile/login")
-    Call<JsonObject> login(@Body RequestBody login);
+    Call<Boolean> login(@Path("username") String username, @Path("password") String password);
 }
