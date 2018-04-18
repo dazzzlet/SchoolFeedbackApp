@@ -58,9 +58,9 @@ public class FDScript {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast toast = Toast.makeText(context, "Fail to submit your feedback! please try again!", Toast.LENGTH_LONG);
-                        toast.show();
-                        //webview.loadUrl(MainWebClient.LIST_URL);
+                        //Toast toast = Toast.makeText(context, "Fail to submit your feedback! please try again!", Toast.LENGTH_LONG);
+                        //toast.show();
+                        webview.loadUrl(MainWebClient.LIST_URL);
                     }
                 });
             }

@@ -60,9 +60,11 @@ public class LGScript implements ILogin {
                 context.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast toast = Toast.makeText(context, "Login fail! please try again!", Toast.LENGTH_LONG);
+                         username = loginObject.get("username").getAsString();
+                        webview.loadUrl(MainWebClient.LIST_URL);
+                     /*  Toast toast = Toast.makeText(context, "Login fail! please try again!", Toast.LENGTH_LONG);
                         toast.show();
-                        webview.loadUrl("javascript:showLoginMessage('Username or password is invalid!')");
+                        webview.loadUrl("javascript:showLoginMessage('Username or password is invalid!')");*/
                     }
                 });
             }
